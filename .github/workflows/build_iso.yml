@@ -6,12 +6,20 @@ jobs:
   fedora-bootc-iso-image-build:
     name: Build latest Fedora bootc ISO image
     runs-on: ubuntu-latest  
+    env:
+      DEST_REGISTRY_HOST: "ghcr.io"
 
     permissions:
       contents: read
       packages: write
-
+    
     steps:
+      - name: Set Lowercase for GitHub Actor
+        run: |
+          echo "GITHUB_ACTOR_LOWER=${GITHUB_ACTOR,,}" >> $GITHUB_ENV
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -19,8 +27,8 @@ jobs:
         id: build-iso
         uses: osbuild/bootc-image-builder-action@main
         with:
-          image: ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:latest
-          types: iso
+          image: "${{ env.DEST_REGISTRY_HOST }}/${{ env.GITHUB_ACTOR_LOWER }}/${{ github.event.repository.name }}:latest"
+          types: bootc-installer
           output: bootc.iso
 
       - name: Upload ISO artifact
