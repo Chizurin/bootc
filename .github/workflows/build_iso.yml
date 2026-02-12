@@ -36,6 +36,7 @@ jobs:
         uses: osbuild/bootc-image-builder-action@main
         with:
           config-file: ${{ env.CONFIG-FILE }}
+          additional-args: "--rootfs btrfs"
           image: "${{ env.DEST_REGISTRY_HOST }}/${{ env.GITHUB_ACTOR_LOWER }}/${{ github.event.repository.name }}:latest"
           types: |
             iso
