@@ -4,7 +4,7 @@ FROM quay.io/fedora/fedora-bootc:${FEDORA_MAJOR_VERSION}
 
 RUN curl -s -o /etc/yum.repos.d/tailscale.repo https://pkgs.tailscale.com/stable/centos/9/tailscale.repo
 
-RUN dnf -y update-minimal --setopt=tsflags=nodocs --security && \
+RUN dnf -y update --setopt=tsflags=nodocs --security && \
     dnf -y install \
         # Core bootc and container runtime
         bootc \
