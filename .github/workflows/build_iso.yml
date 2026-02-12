@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest  
     env:
       DEST_REGISTRY_HOST: "ghcr.io"
-      CONFIG-FILE: config.toml
+      CONFIG-FILE: iso-config.toml
 
     permissions:
       contents: read
