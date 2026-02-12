@@ -2,6 +2,8 @@ name: Build Fedora bootc image
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'Containerfile'
     branches:
       - main
     tags:
