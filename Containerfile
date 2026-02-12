@@ -12,6 +12,7 @@ RUN dnf -y update --setopt=tsflags=nodocs --security && \
         podman-docker \
         podman-compose \
         systemd-container \
+        container-selinux \
         # Networking and remote access
         tailscale \
         firewalld \
@@ -40,7 +41,7 @@ RUN dnf -y update --setopt=tsflags=nodocs --security && \
         tmux \
         # Storage and file transfer
         rsync \
-        nfs-utils && \
+        nfs-utils \
     dnf clean all
 
 # Enable container access to GPU/DRI devices for hardware transcoding
@@ -53,7 +54,8 @@ RUN systemctl enable cockpit.socket
 # Install K3s - lightweight Kubernetes for homelab
 # Install in "server" mode for a control plane node
 # --write-kubeconfig-mode 644 makes kubectl work without sudo
-RUN curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --write-kubeconfig-mode=644" sh -
-
+RUN curl -sfL https://get.k3s.io && \
+    dnf install -y https://rpm.rancher.io/k3s/stable/common/centos/8/noarch/k3s-selinux-1.6-1.el8.noarch.rpm && \
+    INSTALL_K3S_EXEC="server --write-kubeconfig-mode=644" sh -
 RUN bootc container lint
 
