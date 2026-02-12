@@ -1,0 +1,30 @@
+name: Build Fedora bootc image
+on:
+  workflow_dispatch:
+
+jobs:
+  fedora-bootc-iso-image-build:
+    name: Build latest Fedora bootc ISO image
+    runs-on: ubuntu-latest  
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build ISO image
+        id: build-iso
+        uses: osbuild/bootc-image-builder-action@v1
+        with:
+          image: ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:latest
+          types: iso
+          output: bootc.iso
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bootc-iso
+          path: bootc.iso
