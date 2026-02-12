@@ -1,4 +1,4 @@
-name: Build Fedora bootc image
+name: Build Fedora bootc ISO
 on:
   workflow_dispatch:
 
