@@ -41,7 +41,7 @@ RUN dnf -y update --setopt=tsflags=nodocs --security && \
         tmux \
         # Storage and file transfer
         rsync \
-        nfs-utils \
+        nfs-utils && \
     dnf clean all
 
 # Enable container access to GPU/DRI devices for hardware transcoding
