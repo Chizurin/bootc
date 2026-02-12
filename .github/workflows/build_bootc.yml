@@ -14,7 +14,7 @@ jobs:
     env:
       CONTAINERFILE: Containerfile
       DEST_IMAGE: "${{ github.actor }}/${{ github.event.repository.name }}"
-      TAGLIST: latest ${{ github.sha }} ${{ github.ref_name }}
+      TAGLIST: latest ${{ github.sha }} ${{ github.ref_name }} # e.g., latest, commit SHA, branch or tag name -> Need to swap to a proper tagging scheme later
       DEST_REGISTRY_HOST: "ghcr.io"
 
     permissions:
