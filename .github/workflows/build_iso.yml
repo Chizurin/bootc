@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest  
     env:
       DEST_REGISTRY_HOST: "ghcr.io"
+      CONFIG-FILE: config.toml
 
     permissions:
       contents: read
@@ -29,17 +30,18 @@ jobs:
           registry: ${{ env.DEST_REGISTRY_HOST }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Build ISO image
         id: build-iso
         uses: osbuild/bootc-image-builder-action@main
         with:
+          config-file: ${{ env.CONFIG-FILE }}
           image: "${{ env.DEST_REGISTRY_HOST }}/${{ env.GITHUB_ACTOR_LOWER }}/${{ github.event.repository.name }}:latest"
-          types: bootc-installer
-          output: bootc.iso
+          types: |
+            iso
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
         with:
           name: bootc-iso
-          path: bootc.iso
+          path: "${{ steps.build-iso.outputs.output-directory }}/bootc.iso"

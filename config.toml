@@ -1,0 +1,7 @@
+# Default user configuration
+[[customizations.user]]
+name = "admin"
+description = "System Administrator"
+password = "$6$HBdN6sIfjr9aWFFs$EbfkRbn4S9b1mj2ZdoZ7hnFA6PZ5NiiTU.PHgS7t.un0c.fHdpKFQ/EcNHbyCL7N5YPKIR2n08LhLbhOnBnal." 
+groups = ["wheel"]
+shell = "/bin/bash"
