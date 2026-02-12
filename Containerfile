@@ -51,9 +51,7 @@ RUN setsebool -P container_use_devices on && \
 # Enable Cockpit web console for remote management
 RUN systemctl enable cockpit.socket
 
-# Install K3s - lightweight Kubernetes for homelab
-# Install in "server" mode for a control plane node
-# --write-kubeconfig-mode 644 makes kubectl work without sudo
+# Install K3s 
 RUN curl -sfL https://get.k3s.io && \
     dnf install -y https://rpm.rancher.io/k3s/stable/common/centos/8/noarch/k3s-selinux-1.6-1.el8.noarch.rpm && \
     INSTALL_K3S_EXEC="server --write-kubeconfig-mode=644" sh -
