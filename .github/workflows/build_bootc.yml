@@ -1,0 +1,49 @@
+name: Build Fedora bootc image
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+jobs:
+  fedora-bootc-image-build:
+    name: Build Fedora bootc image
+    runs-on: ubuntu-latest
+    env:
+      CONTAINERFILE: Containerfile
+      DEST_IMAGE: "${{ github.actor }}/${{ github.event.repository.name }}"
+      TAGLIST: latest ${{ github.sha }} ${{ github.ref_name }}
+      DEST_REGISTRY_HOST: "ghcr.io"
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: ${{ env.DEST_IMAGE }}
+          tags: ${{ env.TAGLIST }}
+          containerfiles: ${{ env.CONTAINERFILE }}
+
+      - name: Log in to GitHub Container Registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.DEST_REGISTRY_HOST }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to GitHub Container Registry
+        id: push-to-ghcr
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: ${{ env.DEST_REGISTRY_HOST }}
