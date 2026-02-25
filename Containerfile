@@ -18,7 +18,6 @@ RUN dnf -y update --setopt=tsflags=nodocs --security && \
         firewalld \
         # Kubernetes and GitOps tools
         git \
-        kubectl \
         helm \
         # Web-based management (Cockpit)
         cockpit \
@@ -51,9 +50,19 @@ RUN setsebool -P container_use_devices on && \
 # Enable Cockpit web console for remote management
 RUN systemctl enable cockpit.socket
 
-# Install K3s 
-RUN curl -sfL https://get.k3s.io && \
-    dnf install -y https://rpm.rancher.io/k3s/stable/common/centos/8/noarch/k3s-selinux-1.6-1.el8.noarch.rpm && \
-    INSTALL_K3S_EXEC="server --write-kubeconfig-mode=644" sh -
-RUN bootc container lint
+# Install k3s SELinux policy first (must precede install script)
+RUN dnf install -y https://rpm.rancher.io/k3s/stable/common/centos/8/noarch/k3s-selinux-1.6-1.el8.noarch.rpm && \
+    dnf clean all
 
+# Install k3s — pipe into sh, skip start (no kernel during build)
+RUN curl -sfL https://get.k3s.io | \
+    INSTALL_K3S_SKIP_START=true \
+    INSTALL_K3S_EXEC="server --write-kubeconfig-mode=644" \
+    sh -
+
+# Enable k3s and supporting services on boot
+RUN systemctl enable k3s \
+    tailscaled \
+    firewalld
+
+RUN bootc container lint
