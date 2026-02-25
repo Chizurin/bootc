@@ -42,10 +42,14 @@ RUN setsebool -P container_use_devices on && \
 
 RUN systemctl enable cockpit.socket
 
-RUN curl -sfL https://get.k3s.io | \
-    INSTALL_K3S_SKIP_START=true \
-    INSTALL_K3S_EXEC="server --write-kubeconfig-mode=644" \
-    sh -s -
+ARG K8S_VERSION=1.32.3
+
+COPY usr/ /usr/
+
+# Install k3s binary directly (avoids install script issues during container build)
+RUN curl -Lo /usr/local/bin/k3s \
+    https://github.com/k3s-io/k3s/releases/download/v${K8S_VERSION}%2Bk3s1/k3s && \
+    chmod a+x /usr/local/bin/k3s
 
 RUN systemctl enable k3s \
     tailscaled \
