@@ -56,10 +56,11 @@ RUN systemctl enable k3s \
     firewalld
 
 # Reminder: Add flannel for second node
-RUN firewall-offline-cmd --add-port=6443/tcp && \  # k3s API server (kubectl access)
-    firewall-offline-cmd --add-port=27015/udp && \ # L4D2
-    firewall-offline-cmd --add-port=27015/tcp && \ # L4D2
-    firewall-offline-cmd --add-service=cockpit && \ # Cockpit UI
-    firewall-offline-cmd --add-masquerade          # k3s pod networking
+# Firewall rules: k3s API server, L4D2 game server, Cockpit UI, pod networking
+RUN firewall-offline-cmd --add-port=6443/tcp && \
+    firewall-offline-cmd --add-port=27015/udp && \
+    firewall-offline-cmd --add-port=27015/tcp && \
+    firewall-offline-cmd --add-service=cockpit && \
+    firewall-offline-cmd --add-masquerade
 
 RUN bootc container lint
