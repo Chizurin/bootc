@@ -55,4 +55,13 @@ RUN systemctl enable k3s \
     tailscaled \
     firewalld
 
+RUN firewall-cmd --permanent --add-port=6443/tcp && \  # k3s API server
+    firewall-cmd --permanent --add-port=10250/tcp && \ # kubelet
+    firewall-cmd --permanent --add-port=8472/udp && \  # flannel VXLAN
+    firewall-cmd --permanent --add-port=51820/udp && \ # flannel WireGuard
+    firewall-cmd --permanent --add-port=27015/udp && \ # L4D2
+    firewall-cmd --permanent --add-port=27015/tcp && \ # L4D2
+    firewall-cmd --permanent --add-service=cockpit && \ # Cockpit UI
+    firewall-cmd --permanent --add-masquerade          # needed for k3s networking
+    
 RUN bootc container lint
