@@ -18,7 +18,6 @@ RUN dnf -y update --setopt=tsflags=nodocs --security && \
         git \
         helm \
         cockpit \
-        cockpit-pcp \
         cockpit-podman \
         cockpit-storaged \
         cockpit-networkmanager \
