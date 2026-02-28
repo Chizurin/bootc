@@ -23,6 +23,7 @@ RUN dnf -y update --setopt=tsflags=nodocs --security && \
         cockpit-storaged \
         cockpit-networkmanager \
         cockpit-selinux \
+        iscsi-initiator-utils \
         libva \
         libva-intel-media-driver \
         libva-utils \
@@ -54,7 +55,8 @@ RUN curl -Lo /usr/local/bin/k3s \
 
 RUN systemctl enable k3s \
     tailscaled \
-    firewalld
+    firewalld \
+    iscsid
 
 # Reminder: Add flannel for second node
 # Firewall rules: k3s API server, Minecraft, Simple Voice Chat (MC), Steam Server, Cockpit UI, pod networking
