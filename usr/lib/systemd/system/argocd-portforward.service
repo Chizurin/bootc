@@ -1,0 +1,11 @@
+[Unit]
+Description=ArgoCD Port Forward
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/kubectl port-forward svc/argocd-server -n argocd 8080:443 --kubeconfig /root/.kube/config
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
