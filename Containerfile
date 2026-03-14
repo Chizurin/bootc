@@ -58,12 +58,13 @@ RUN systemctl enable k3s \
     iscsid
 
 # Reminder: Add flannel for second node
-# Firewall rules: k3s API server, Minecraft, Simple Voice Chat (MC), Steam Server, Cockpit UI, pod networking
+# Firewall rules: k3s API server, Minecraft, Simple Voice Chat (MC), Metrics Server, Cockpit UI, pod networking
 RUN firewall-offline-cmd --add-port=6443/tcp && \
     firewall-offline-cmd --add-port=30565/tcp && \
     firewall-offline-cmd --add-port=30566/udp && \
     firewall-offline-cmd --add-port=27015/udp && \
     firewall-offline-cmd --add-port=27015/tcp && \
+    firewall-offline-cmd --add-port=10250/tcp && \
     firewall-offline-cmd --add-service=cockpit && \
     firewall-offline-cmd --add-masquerade
 
