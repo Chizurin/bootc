@@ -3,7 +3,7 @@ Description=ArgoCD Port Forward
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/k3s kubectl port-forward svc/argocd-server -n argocd 8080:443 --kubeconfig /root/.kube/config
+ExecStart=/usr/local/bin/k3s kubectl port-forward svc/argocd-server -n argocd 8080:443 --kubeconfig /etc/rancher/k3s/k3s.yaml
 Restart=always
 RestartSec=5
 
